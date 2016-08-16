@@ -2,6 +2,7 @@ package com.codepath.apps.tweetsapp;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,10 +31,12 @@ import cz.msebera.android.httpclient.Header;
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
     @BindView (R.id.lvTweets) ListView lvTweets;
     @BindView (R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +44,11 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
         Configuration.Builder config = new Configuration.Builder(this);
         config.addModelClasses(TweetModel.class, UserModel.class);
         ActiveAndroid.initialize(config.create());
+
         tweets = new ArrayList<>();
         List<TweetModel> queryResults = new Select().from(TweetModel.class)
                 .orderBy("created_at").limit(40).execute();
@@ -54,7 +59,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         aTweets = new TweetsArrayAdapter(this, tweets);
         lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
-        populateTimeline();
+        // populateTimeline();
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // populateTimeline();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     // Send API request to get timeline json
