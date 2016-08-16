@@ -64,7 +64,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // populateTimeline();
+                populateTimeline();
                 swipeContainer.setRefreshing(false);
             }
         });
