@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
     @BindView (R.id.lvTweets) ListView lvTweets;
     @BindView (R.id.toolbar) Toolbar toolbar;
 
@@ -87,5 +87,10 @@ public class TimelineActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         ComposeFragment composeFragment = ComposeFragment.newInstance();
         composeFragment.show(fm, "fragment_compose");
+    }
+
+    @Override
+    public void onSuccessfulTweet(Tweet t) {
+        aTweets.insert(t, 0);
     }
 }
