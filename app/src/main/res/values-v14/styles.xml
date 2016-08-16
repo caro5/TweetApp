@@ -5,8 +5,15 @@
         AppBaseTheme from BOTH res/values/styles.xml and
         res/values-v11/styles.xml on API 14+ devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- API 14 theme customizations can go here. -->
+    </style>
+    <style name="counterText">
+        <item name="android:textColor">#aa6262ed</item>
+    </style>
+
+    <style name="counterOverride">
+        <item name="android:textColor">#dad14848</item>
     </style>
 
 </resources>
