@@ -25,6 +25,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvBody) TextView tvBody;
         @BindView(R.id.tvUserName) TextView tvUserName;
+        @BindView(R.id.tvDate) TextView tvDate;
+
 
         public ViewHolder(View v) {
             ButterKnife.bind(this, v);
@@ -48,6 +50,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
         viewHolder.tvUserName.setText(tweet.getUser().getScreenName());
         viewHolder.tvBody.setText(tweet.getBody());
+        ParseRelativeDate parseRelativeDate = new ParseRelativeDate();
+        viewHolder.tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         return convertView;
