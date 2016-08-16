@@ -9,13 +9,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
+import com.activeandroid.query.Select;
 import com.codepath.apps.tweetsapp.models.Tweet;
+import com.codepath.apps.tweetsapp.models.TweetModel;
+import com.codepath.apps.tweetsapp.models.UserModel;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +41,16 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
+        Configuration.Builder config = new Configuration.Builder(this);
+        config.addModelClasses(TweetModel.class, UserModel.class);
+        ActiveAndroid.initialize(config.create());
         tweets = new ArrayList<>();
+        List<TweetModel> queryResults = new Select().from(TweetModel.class)
+                .orderBy("created_at").limit(40).execute();
+        for (int i = 0; i < queryResults.size(); i++) {
+            tweets.add(Tweet.fromModel(queryResults.get(i)));
+        }
+
         aTweets = new TweetsArrayAdapter(this, tweets);
         lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
@@ -50,10 +64,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());
-                // json here
-                // deserialize
-                // create models and add to adapter
-                // load data into listview
                 aTweets.addAll(Tweet.fromJSONArray(json));
             }
 

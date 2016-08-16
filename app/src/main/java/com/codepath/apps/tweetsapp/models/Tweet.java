@@ -1,5 +1,7 @@
 package com.codepath.apps.tweetsapp.models;
 
+import com.activeandroid.query.Select;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +42,16 @@ public class Tweet {
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            TweetModel tweetModel = Tweet.getByUID(tweet.getUid());
+
+            if (tweetModel == null) {
+                UserModel userModel = User.getByUID(tweet.user.getUid());
+                //save each tweet
+                if (userModel == null) {
+                    userModel = tweet.user.saveUser();
+                }
+                tweet.saveTweet(userModel);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,5 +72,25 @@ public class Tweet {
             }
         }
         return tweets;
+    }
+
+    public static TweetModel getByUID(long uid) {
+        return new Select()
+                .from(TweetModel.class)
+                .where("remote_id = ?", uid)
+                .executeSingle();
+    }
+
+    public void saveTweet(UserModel user) {
+        TweetModel model = new TweetModel(this.getUid(), this.getBody(), this.getCreatedAt(), user);
+        model.save();
+    }
+    public static Tweet fromModel(TweetModel model) {
+        Tweet t = new Tweet();
+        t.body = model.body;
+        t.uid = model.remoteId;
+        t.createdAt = model.createdAt;
+        t.user = User.fromModel(model.user);
+        return t;
     }
 }

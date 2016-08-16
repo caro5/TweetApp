@@ -1,5 +1,7 @@
 package com.codepath.apps.tweetsapp.models;
 
+import com.activeandroid.query.Select;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +41,28 @@ public class User {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return u;
+    }
+
+    public static UserModel getByUID(long uid) {
+        return new Select()
+                .from(UserModel.class)
+                .where("remote_id = ?", uid)
+                .executeSingle();
+    }
+
+    public UserModel saveUser() {
+        UserModel model = new UserModel(this.getUid(), this.getName(), this.getScreenName(), this.getProfileImageUrl());
+        model.save();
+        return model;
+    }
+
+    public static User fromModel(UserModel model) {
+        User u = new User();
+        u.name = model.name;
+        u.uid = model.remoteId;
+        u.screenName = model.screenName;
+        u.profileImageUrl = model.profileImageUrl;
         return u;
     }
 }
