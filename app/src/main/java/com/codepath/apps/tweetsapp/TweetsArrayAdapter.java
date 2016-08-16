@@ -13,42 +13,43 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by cwong on 8/15/16.
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    static class ViewHolder {
+        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+        @BindView(R.id.tvBody) TextView tvBody;
+        @BindView(R.id.tvUserName) TextView tvUserName;
+
+        public ViewHolder(View v) {
+            ButterKnife.bind(this, v);
+        }
+    }
 
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
     }
 
-
-    // override and setup custom template
-    // ViewHolder
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // 1. get tweet
-        // 2. find or inflate template
-        // 3. find subviews to fill with data
-        // 4. populate data into subviews
-        // 5. return view
+        ViewHolder viewHolder;
         Tweet tweet = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-//        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
-//        @BindView(R.id.tvBody) TextView tvBody;
-//        @BindView(R.id.tvUserName) TextView tvUserName;
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-
-        tvUserName.setText(tweet.getUser().getScreenName());
-        tvBody.setText(tweet.getBody());
-        ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        viewHolder.tvUserName.setText(tweet.getUser().getScreenName());
+        viewHolder.tvBody.setText(tweet.getBody());
+        viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         return convertView;
     }
 }
