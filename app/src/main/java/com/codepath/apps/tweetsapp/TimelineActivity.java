@@ -63,7 +63,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(adapter);
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(layoutManager);
         client = TwitterApplication.getRestClient();
 
         if (!isNetworkAvailable() || !isOnline()) {
@@ -74,13 +75,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 tweets.add(Tweet.fromModel(queryResults.get(i)));
             }
         } else {
-            populateTimeline();
+            populateTimeline(0, -1);
         }
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeline();
+                populateTimeline(0, -1);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -93,6 +94,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         fabCreate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!isOnline() || !isNetworkAvailable()) {
+                    Toast.makeText(getApplicationContext(), "Connect to the internet before tweeting", Toast.LENGTH_LONG).show();
+                    return false;
+                }
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     composeMessage();
                     return true;
@@ -101,17 +106,30 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 }
             }
         });
+
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (!isOnline() || !isNetworkAvailable()) {
+                    Toast.makeText(getApplicationContext(), "Unable to connect to the internet", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Tweet lastTweet = tweets.get(tweets.size() - 1);
+                long tweetId = lastTweet.getUid();
+                populateTimeline(page, tweetId);
+            }
+        });
     }
 
     // Send API request to get timeline json
     // fill listview by creating tweet objects
-    private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+    private void populateTimeline(int page, long maxId) {
+        client.getHomeTimeline(page, maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 tweets.addAll(0, Tweet.fromJSONArray(json));
                 adapter.notifyItemRangeInserted(0, json.length());
-                rvTweets.scrollToPosition(0);
+                // rvTweets.scrollToPosition(0);
             }
 
             @Override

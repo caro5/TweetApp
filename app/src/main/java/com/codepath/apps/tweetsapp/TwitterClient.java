@@ -45,11 +45,15 @@ public class TwitterClient extends OAuthBaseClient {
 	// GET statuses/home_timeline.json
     // count=25
     // since_id=1 (all tweets sorted by date)
-    public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(int page, long maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", 10);
         params.put("since_id", 1);
+        params.put("page", page);
+        if (maxId != -1) {
+            params.put("max_id", maxId);
+        }
         getClient().get(apiUrl, params, handler);
     }
 
