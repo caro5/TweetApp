@@ -44,6 +44,7 @@ public class ComposeFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compose, container, false);
+        getDialog().setCanceledOnTouchOutside(true);
         unbinder = ButterKnife.bind(this, view);
         client = TwitterApplication.getRestClient();
         return view;

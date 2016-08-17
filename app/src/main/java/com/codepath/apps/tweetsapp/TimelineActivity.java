@@ -1,14 +1,22 @@
 package com.codepath.apps.tweetsapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -21,6 +29,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +38,15 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
-    @BindView (R.id.lvTweets) ListView lvTweets;
+    @BindView (R.id.rvTweets) RecyclerView rvTweets;
     @BindView (R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.fabCreate) FloatingActionButton fabCreate;
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
-    private TweetsArrayAdapter aTweets;
+    //private TweetsArrayAdapter aTweets;
+    private TweetsAdapter adapter;
 
 
     @Override
@@ -50,21 +61,26 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         ActiveAndroid.initialize(config.create());
 
         tweets = new ArrayList<>();
-        List<TweetModel> queryResults = new Select().from(TweetModel.class)
-                .orderBy("created_at").limit(40).execute();
-        for (int i = 0; i < queryResults.size(); i++) {
-            tweets.add(Tweet.fromModel(queryResults.get(i)));
-        }
-
-        aTweets = new TweetsArrayAdapter(this, tweets);
-        lvTweets.setAdapter(aTweets);
+        adapter = new TweetsAdapter(this, tweets);
+        rvTweets.setAdapter(adapter);
+        rvTweets.setLayoutManager(new LinearLayoutManager(this));
         client = TwitterApplication.getRestClient();
-        // populateTimeline();
+
+        if (!isNetworkAvailable() || !isOnline()) {
+            Toast.makeText(this, "Unable to connect to the internet", Toast.LENGTH_LONG).show();
+            List<TweetModel> queryResults = new Select().from(TweetModel.class)
+                    .orderBy("created_at DESC").limit(40).execute();
+            for (int i = 0; i < queryResults.size(); i++) {
+                tweets.add(Tweet.fromModel(queryResults.get(i)));
+            }
+        } else {
+            // populateTimeline();
+        }
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeline();
+                // populateTimeline();
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -73,6 +89,18 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        fabCreate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    composeMessage();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
     }
 
     // Send API request to get timeline json
@@ -81,8 +109,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("DEBUG", json.toString());
-                aTweets.addAll(Tweet.fromJSONArray(json));
+                tweets.addAll(0, Tweet.fromJSONArray(json));
+                adapter.notifyItemRangeInserted(0, json.length());
+                rvTweets.scrollToPosition(0);
             }
 
             @Override
@@ -119,6 +148,25 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     @Override
     public void onSuccessfulTweet(Tweet t) {
-        aTweets.insert(t, 0);
+        tweets.add(0, t);
+        adapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
 }
