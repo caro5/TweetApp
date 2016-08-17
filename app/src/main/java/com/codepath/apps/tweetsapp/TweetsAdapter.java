@@ -26,6 +26,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvBody) TextView tvBody;
         @BindView(R.id.tvUserName) TextView tvUserName;
+        @BindView(R.id.tvScreenName) TextView tvScreenName;
         @BindView(R.id.tvDate) TextView tvDate;
 
         public ViewHolder(View itemView) {
@@ -58,8 +59,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public void onBindViewHolder(TweetsAdapter.ViewHolder viewHolder, int position) {
         Tweet tweet = mTweets.get(position);
 
-        viewHolder.tvUserName.setText(tweet.getUser().getScreenName());
+        viewHolder.tvUserName.setText(tweet.getUser().getName());
         viewHolder.tvBody.setText(tweet.getBody());
+        viewHolder.tvScreenName.setText("@" + tweet.getUser().getScreenName());
         ParseRelativeDate parseRelativeDate = new ParseRelativeDate();
         viewHolder.tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
