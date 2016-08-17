@@ -74,13 +74,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 tweets.add(Tweet.fromModel(queryResults.get(i)));
             }
         } else {
-            // populateTimeline();
+            populateTimeline();
         }
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // populateTimeline();
+                populateTimeline();
                 swipeContainer.setRefreshing(false);
             }
         });

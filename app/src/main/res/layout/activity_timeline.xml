@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:src="@drawable/ic_create_white_48dp"
+        android:src="@drawable/ic_create_white_24dp"
         app:layout_anchor="@id/rvTweets"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_alignParentBottom="true"

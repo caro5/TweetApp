@@ -2,6 +2,7 @@ package com.codepath.apps.tweetsapp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.apps.tweetsapp.models.Tweet;
@@ -24,7 +24,7 @@ import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 
 public class ComposeFragment extends DialogFragment {
-    @BindView(R.id.etTweet) EditText etTweet;
+    @BindView(R.id.etTweet) TextInputEditText etTweet;
     @BindView(R.id.btnTweet) Button btnTweet;
 
     private Unbinder unbinder;
