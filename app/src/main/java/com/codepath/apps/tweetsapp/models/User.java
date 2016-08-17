@@ -4,10 +4,12 @@ import com.activeandroid.query.Select;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by cwong on 8/15/16.
  */
+@Parcel
 public class User {
     public String getName() {
         return name;
@@ -29,6 +31,15 @@ public class User {
     private long uid;
     private String screenName;
     private String profileImageUrl;
+
+    public User() {}
+
+    public User(String name, long uid, String screenName, String profileImageUrl) {
+        this.name = name;
+        this.uid = uid;
+        this.screenName = screenName;
+        this.profileImageUrl = profileImageUrl;
+    }
 
     public static User fromJSON(JSONObject jsonObject) {
         User u = new User();

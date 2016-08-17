@@ -27,6 +27,7 @@
         android:text="New Text"
         android:id="@+id/tvBody"
         android:autoLink="all"
+        android:ellipsize="end"
         android:linksClickable="true"
         android:lines="2"
         android:layout_alignBottom="@+id/ivProfileImage"

@@ -29,6 +29,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -131,6 +132,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Tweet tw = tweets.get(position);
                         Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
+                        i.putExtra("tweet", Parcels.wrap(tw));
                         startActivity(i);
 
                     }

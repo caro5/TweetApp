@@ -5,13 +5,14 @@ import com.activeandroid.query.Select;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
 /**
  * Created by cwong on 8/15/16.
  */
-
+@Parcel
 public class Tweet {
 
     public String getBody() {
@@ -34,6 +35,15 @@ public class Tweet {
     private long uid;
     private User user;
     private String createdAt;
+
+    public Tweet() {}
+
+    public Tweet(String body, long uid, User user, String createdAt) {
+        this.body = body;
+        this.uid = uid;
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 
     //Deserialize JSON
     public static Tweet fromJSON(JSONObject jsonObject) {
