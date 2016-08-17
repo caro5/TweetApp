@@ -11,6 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by cwong on 8/15/16.
  */
+
 public class Tweet {
 
     public String getBody() {

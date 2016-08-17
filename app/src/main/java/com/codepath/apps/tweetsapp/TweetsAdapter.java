@@ -72,21 +72,4 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public int getItemCount() {
         return mTweets.size();
     }
-//    public static ArrayList<Tweet> fromJSONArray(JSONArray jsonArray) {
-//        ArrayList<Tweet> tweets = new ArrayList<>();
-//        for (int i = 0; i < jsonArray.length(); i++) {
-//            try {
-//                JSONObject tweetJson = jsonArray.getJSONObject(i);
-//                Tweet tweet = Tweet.fromJSON(tweetJson);
-//                if (tweet != null) {
-//                    tweets.add(tweet);
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                continue;
-//            }
-//        }
-//        return tweets;
-//    }
-
 }

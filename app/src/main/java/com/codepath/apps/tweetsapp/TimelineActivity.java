@@ -1,6 +1,7 @@
 package com.codepath.apps.tweetsapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private ArrayList<Tweet> tweets;
     //private TweetsArrayAdapter aTweets;
     private TweetsAdapter adapter;
+    LinearLayoutManager layoutManager;
 
 
     @Override
@@ -63,7 +65,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(adapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(layoutManager);
         client = TwitterApplication.getRestClient();
 
@@ -77,7 +79,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         } else {
             populateTimeline(0, -1);
         }
+        setupListeners();
+    }
 
+    public void setupListeners() {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -119,6 +124,18 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 populateTimeline(page, tweetId);
             }
         });
+
+        ItemClickSupport.addTo(rvTweets).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Tweet tw = tweets.get(position);
+                        Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
+                        startActivity(i);
+
+                    }
+                }
+        );
     }
 
     // Send API request to get timeline json
