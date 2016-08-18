@@ -1,7 +1,9 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.codepath.apps.tweetsapp.R;
 
 /**
  * Created by cwong on 8/17/16.

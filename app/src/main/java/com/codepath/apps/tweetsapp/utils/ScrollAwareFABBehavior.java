@@ -1,4 +1,4 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.utils;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

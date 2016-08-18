@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.tweetsapp.models.Tweet;
+import com.codepath.apps.tweetsapp.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

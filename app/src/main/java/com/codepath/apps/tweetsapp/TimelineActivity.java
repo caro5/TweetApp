@@ -25,6 +25,8 @@ import com.activeandroid.query.Select;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.models.TweetModel;
 import com.codepath.apps.tweetsapp.models.UserModel;
+import com.codepath.apps.tweetsapp.utils.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.tweetsapp.utils.ItemClickSupport;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -75,6 +77,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             List<TweetModel> queryResults = new Select().from(TweetModel.class)
                     .orderBy("created_at DESC").limit(40).execute();
             for (int i = 0; i < queryResults.size(); i++) {
+                TweetModel model = queryResults.get(i);
+//                List<Entity> entities = new Select().from(EntityModel.class)
+//                        .where("tweet_id = ?", model.remoteId)
+//                        .execute();
                 tweets.add(Tweet.fromModel(queryResults.get(i)));
             }
         } else {
