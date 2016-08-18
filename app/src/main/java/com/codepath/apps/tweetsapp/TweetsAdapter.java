@@ -31,6 +31,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.tvUserName) TextView tvUserName;
         @BindView(R.id.tvScreenName) TextView tvScreenName;
         @BindView(R.id.tvDate) TextView tvDate;
+        @BindView(R.id.ivRetweets) ImageView ivRetweets;
+        @BindView(R.id.ivFavorites) ImageView ivFavorites;
         @BindView(R.id.tvFavoritesCount) TextView tvFavoritesCount;
         @BindView(R.id.tvRetweetCount) TextView tvRetweetCount;
 
@@ -69,6 +71,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         viewHolder.tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
+        if (tweet.isRetweeted()) {
+            viewHolder.ivRetweets.setImageResource(R.drawable.retweeted);
+        }
+        if (tweet.isFavorited()) {
+            viewHolder.ivFavorites.setImageResource(R.drawable.liked);
+        }
         viewHolder.tvFavoritesCount.setText(Integer.toString(tweet.getFavouritesCount()));
         viewHolder.tvRetweetCount.setText(Integer.toString(tweet.getRetweetCount()));
     }

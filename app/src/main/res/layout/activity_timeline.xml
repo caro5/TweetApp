@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleTextColor="@android:color/white"
-            android:background="@android:color/background_dark">
+            android:background="@color/twitter_main_color">
         </android.support.v7.widget.Toolbar>
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -47,6 +47,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/fabCreate"
+        app:fabSize="mini"
         app:layout_behavior="com.codepath.apps.tweetsapp.ScrollAwareFABBehavior"/>
 
     </RelativeLayout>
