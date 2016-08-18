@@ -54,4 +54,52 @@
         android:layout_toEndOf="@+id/tvUserName"
         android:textColor="#939393" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/tvRetweetCount"
+        android:layout_alignBottom="@+id/ivRetweets"
+        android:layout_toRightOf="@+id/ivRetweets"
+        android:layout_toEndOf="@+id/ivRetweets" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivFavorites"
+        android:src="@drawable/like"
+        android:layout_alignBottom="@+id/tvRetweetCount"
+        android:layout_toLeftOf="@+id/tvFavoritesCount"
+        android:layout_toStartOf="@+id/tvFavoritesCount" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivProfileImage"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/ivRetweets"
+        android:src="@drawable/like"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/tvFavoritesCount"
+        android:layout_alignBottom="@+id/ivFavorites"
+        android:layout_toRightOf="@+id/tvScreenName"
+        android:layout_toEndOf="@+id/tvScreenName" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivReply"
+        android:background="@android:mipmap/sym_def_app_icon"
+        android:layout_alignTop="@+id/tvFavoritesCount"
+        android:layout_toLeftOf="@+id/tvDate"
+        android:layout_toStartOf="@+id/tvDate" />
 </RelativeLayout>

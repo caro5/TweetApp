@@ -22,6 +22,8 @@ import butterknife.ButterKnife;
  */
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
+    private List<Tweet> mTweets;
+    private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
@@ -29,14 +31,16 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.tvUserName) TextView tvUserName;
         @BindView(R.id.tvScreenName) TextView tvScreenName;
         @BindView(R.id.tvDate) TextView tvDate;
+//        @BindView(R.id.ivFavorites) ImageView ivFavorites;
+//        @BindView(R.id.ivRetweets) ImageView ivRetweets;
+        @BindView(R.id.tvFavoritesCount) TextView tvFavoritesCount;
+        @BindView(R.id.tvRetweetCount) TextView tvRetweetCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
-    private List<Tweet> mTweets;
-    private Context mContext;
 
     public TweetsAdapter(Context context, List<Tweet> tweets) {
         mTweets = tweets;
@@ -66,7 +70,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ParseRelativeDate parseRelativeDate = new ParseRelativeDate();
         viewHolder.tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
+//        viewHolder.ivFavorites.setImageResource(R.drawable.like);
+//        viewHolder.ivRetweets.setImageResource(R.drawable.like);
+
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
+       // viewHolder.tvFavoritesCount.setText(tweet.getFavouritesCount());
+       //  viewHolder.tvRetweetCount.setText(tweet.getRetweetCount());
     }
 
     @Override

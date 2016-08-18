@@ -16,6 +16,7 @@ import com.codepath.apps.tweetsapp.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,10 @@ public class ComposeFragment extends DialogFragment {
 
     private Unbinder unbinder;
     private TwitterClient client;
+    public Tweet tweet;
+    public boolean isReply;
+    public Long tweetId;
+    public String userName;
 
     public ComposeFragment() {}
 
@@ -53,12 +58,48 @@ public class ComposeFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        isReply = getArguments().getBoolean("isReply");
+        if (isReply) {
+            tweet = Parcels.unwrap(getArguments().getParcelable("tweet"));
+            tweetId = tweet.getUid();
+            userName = tweet.getUser().getScreenName();
+            etTweet.setText("@" + userName);
+        }
         etTweet.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @OnClick(R.id.btnTweet)
+    public void tweet() {
+        if (isReply) {
+            replyTweet();
+        } else {
+            updateStatus();
+        }
+    }
+    public void replyTweet() {
+        String tweet = etTweet.getText().toString();
+        if (tweet.length() > 140) {
+            Toast.makeText(getContext(), "Tweet is too long. Remove some thoughts and try again", Toast.LENGTH_LONG).show();
+            return;
+        }
+        client.postReplyTweet(tweet, tweetId, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
+                Log.d("DEBUG", jsonObject.toString());
+                Tweet tweet = Tweet.fromJSON(jsonObject);
+                sendBackResult(tweet);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+
+            }
+        });
+    }
+
     public void updateStatus() {
         String tweet = etTweet.getText().toString();
         if (tweet.length() > 140) {

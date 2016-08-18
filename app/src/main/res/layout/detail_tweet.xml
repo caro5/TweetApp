@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/tvBody"
+        android:lines="5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/ivProfileImage"
@@ -61,5 +62,14 @@
         android:layout_below="@+id/toolbar"
         android:layout_alignRight="@+id/toolbar"
         android:layout_alignEnd="@+id/toolbar" />
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tvBody"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignRight="@+id/ivProfileImage"
+        android:layout_alignEnd="@+id/ivProfileImage"
+        android:id="@+id/ivReply" />
 
 </RelativeLayout>

@@ -30,9 +30,9 @@ public class Entity {
         return type;
     }
 
-    private long id;
-    private String mediaUrl;
-    private String type;
+    public long id;
+    public String mediaUrl;
+    public String type;
 
     public Entity() {}
 

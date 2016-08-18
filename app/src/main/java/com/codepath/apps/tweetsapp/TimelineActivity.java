@@ -186,6 +186,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     public void composeMessage() {
         FragmentManager fm = getSupportFragmentManager();
         ComposeFragment composeFragment = ComposeFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isReply", false);
+        composeFragment.setArguments(bundle);
         composeFragment.show(fm, "fragment_compose");
     }
 
