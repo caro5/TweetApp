@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:padding="10dp">
 
@@ -69,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivFavorites"
-        android:src="@drawable/like"
+        app:srcCompat="@drawable/retweet"
         android:layout_alignBottom="@+id/tvRetweetCount"
         android:layout_toLeftOf="@+id/tvFavoritesCount"
         android:layout_toStartOf="@+id/tvFavoritesCount" />
@@ -81,7 +82,7 @@
         android:layout_below="@id/ivProfileImage"
         android:layout_alignParentLeft="true"
         android:id="@+id/ivRetweets"
-        android:src="@drawable/like"
+        app:srcCompat="@drawable/like"
         />
 
     <TextView
@@ -98,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivReply"
-        android:background="@android:mipmap/sym_def_app_icon"
+        app:srcCompat="@drawable/tweet_reply"
         android:layout_alignTop="@+id/tvFavoritesCount"
         android:layout_toLeftOf="@+id/tvDate"
         android:layout_toStartOf="@+id/tvDate" />

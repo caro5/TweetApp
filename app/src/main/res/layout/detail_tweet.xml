@@ -67,7 +67,7 @@
         android:layout_height="20dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/tvBody"
-        android:src="@drawable/ic_launcher"
+        app:srcCompat="@drawable/tweet_reply"
         android:layout_alignRight="@+id/ivProfileImage"
         android:layout_alignEnd="@+id/ivProfileImage"
         android:id="@+id/ivReply" />
