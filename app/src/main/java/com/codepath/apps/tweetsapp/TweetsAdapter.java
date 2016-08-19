@@ -2,6 +2,9 @@ package com.codepath.apps.tweetsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +28,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * Created by cwong on 8/16/16.
  */
 
-public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
+public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> implements ComposeFragment.ComposeFragmentListener {
     private ArrayList<Tweet> mTweets;
     private Context mContext;
 
@@ -42,6 +46,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.tvDate) TextView tvDate;
         @BindView(R.id.ivRetweets) ImageView ivRetweets;
         @BindView(R.id.ivFavorites) ImageView ivFavorites;
+        @BindView(R.id.ivReply) ImageView ivReply;
         @BindView(R.id.tvFavoritesCount) TextView tvRetweetCount; // TODO: switch these values
         @BindView(R.id.tvRetweetCount) TextView tvFavoritesCount; // TODO: switch these values
 
@@ -152,6 +157,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
             }
         }
+
+        @OnClick(R.id.ivReply)
+        public void replyTweet(View v) {
+            final int position = getLayoutPosition();
+            final Tweet tweet = mTweets.get(position);
+            FragmentManager fm = ((AppCompatActivity) mContext).getSupportFragmentManager();
+            ComposeFragment composeFragment = ComposeFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("tweet", Parcels.wrap(tweet));
+            bundle.putBoolean("isReply", true);
+            composeFragment.setArguments(bundle);
+            composeFragment.show(fm, "fragment_compose");
+        }
+    }
+
+    @Override
+    public void onSuccessfulTweet(Tweet t) {
+        Toast.makeText(mContext, "Successfully replied", Toast.LENGTH_LONG).show();
     }
 
     public TweetsAdapter(Context context, ArrayList<Tweet> tweets) {
@@ -174,9 +197,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(TweetsAdapter.ViewHolder viewHolder, int position) {
-        Tweet t = mTweets.get(position);
-        TweetModel m = Tweet.getByUID(t.getUid());
-        Tweet tweet = Tweet.fromModel(m);
+        Tweet tweet = mTweets.get(position);
+        try {
+            TweetModel m = Tweet.getByUID(tweet.getUid());
+            tweet = Tweet.fromModel(m);
+        } catch (Exception exception) {
+            Toast.makeText(mContext, "asdf", Toast.LENGTH_LONG).show();
+        }
         mTweets.set(position, tweet);
 
         viewHolder.tvUserName.setText(tweet.getUser().getName());
@@ -185,7 +212,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ParseRelativeDate parseRelativeDate = new ParseRelativeDate();
         viewHolder.tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(2, 2)).into(viewHolder.ivProfileImage);
         if (tweet.isRetweeted()) {
             viewHolder.ivRetweets.setImageResource(R.drawable.retweeted);
         } else {
