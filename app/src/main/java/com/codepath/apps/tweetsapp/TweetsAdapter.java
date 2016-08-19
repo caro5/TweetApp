@@ -42,8 +42,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.tvDate) TextView tvDate;
         @BindView(R.id.ivRetweets) ImageView ivRetweets;
         @BindView(R.id.ivFavorites) ImageView ivFavorites;
-        @BindView(R.id.tvFavoritesCount) TextView tvFavoritesCount;
-        @BindView(R.id.tvRetweetCount) TextView tvRetweetCount;
+        @BindView(R.id.tvFavoritesCount) TextView tvRetweetCount; // TODO: switch these values
+        @BindView(R.id.tvRetweetCount) TextView tvFavoritesCount; // TODO: switch these values
 
         public ViewHolder(View itemView) {
             super(itemView);
