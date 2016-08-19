@@ -17,6 +17,7 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * Created by cwong on 8/17/16.
@@ -29,6 +30,7 @@ public class DetailActivity extends AppCompatActivity implements ComposeFragment
     @BindView(R.id.tvDate) TextView tvDate;
     @BindView (R.id.toolbar) Toolbar toolbar;
     @BindView (R.id.ivReply) ImageView ivReply;
+    @BindView(R.id.ivEntity) ImageView ivEntity;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +46,17 @@ public class DetailActivity extends AppCompatActivity implements ComposeFragment
         ParseRelativeDate parseRelativeDate = new ParseRelativeDate();
         tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(this).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
-
+        Picasso.with(this).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(2, 2)).into(ivProfileImage);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        ivEntity.setImageResource(0);
+        if (tweet.getEntities().size() > 0) {
+            Picasso.with(this).load(tweet.getEntities().get(0).mediaUrl).into(ivEntity);
+        }
 
         ivReply.setOnClickListener(new View.OnClickListener() {
             @Override

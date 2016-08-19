@@ -67,12 +67,20 @@
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tvBody"
         app:srcCompat="@drawable/tweet_reply"
-        android:layout_alignRight="@+id/ivProfileImage"
-        android:layout_alignEnd="@+id/ivProfileImage"
-        android:id="@+id/ivReply" />
+        android:id="@+id/ivReply"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/tvBody"
+        android:layout_alignEnd="@+id/tvBody" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivEntity"
+            android:layout_below="@+id/tvBody"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 
 </RelativeLayout>

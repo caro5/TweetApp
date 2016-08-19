@@ -45,7 +45,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
-    //private TweetsArrayAdapter aTweets;
     private TweetsAdapter adapter;
     LinearLayoutManager layoutManager;
 
@@ -67,8 +66,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         layoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(layoutManager);
         client = TwitterApplication.getRestClient();
-        // if (isNetworkAvailable() || isOnline()) {
-        if (!isNetworkAvailable() || !isOnline()) {
+        if (isNetworkAvailable() || isOnline()) {
+        // if (!isNetworkAvailable() || !isOnline()) {
             Toast.makeText(this, "Unable to connect to the internet", Toast.LENGTH_LONG).show();
             List<TweetModel> queryResults = new Select().from(TweetModel.class)
                     .orderBy("created_at DESC").limit(40).execute();
@@ -85,7 +84,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // populateTimeline(0, -1);
+                populateTimeline(-1);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -120,22 +119,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 }
                 Tweet lastTweet = tweets.get(tweets.size() - 1);
                 long tweetId = lastTweet.getUid();
-                // populateTimeline(page, tweetId);
+                populateTimeline(tweetId);
             }
         });
-
-//        ItemClickSupport.addTo(rvTweets).setOnItemClickListener(
-//                new ItemClickSupport.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-//                        Tweet tw = tweets.get(position);
-//                        Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
-//                        i.putExtra("tweet", Parcels.wrap(tw));
-//                        startActivity(i);
-//
-//                    }
-//                }
-//        );
     }
 
     // Send API request to get timeline json
@@ -146,7 +132,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 tweets.addAll(0, Tweet.fromJSONArray(json));
                 adapter.notifyItemRangeInserted(0, json.length());
-                // rvTweets.scrollToPosition(0);
+                rvTweets.scrollToPosition(0);
             }
 
             @Override
