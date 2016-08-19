@@ -27,10 +27,10 @@ public class User {
         return profileImageUrl;
     }
 
-    private String name;
-    private long uid;
-    private String screenName;
-    private String profileImageUrl;
+    public String name;
+    public long uid;
+    public String screenName;
+    public String profileImageUrl;
 
     public User() {}
 

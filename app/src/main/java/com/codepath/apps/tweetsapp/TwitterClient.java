@@ -45,12 +45,11 @@ public class TwitterClient extends OAuthBaseClient {
 	// GET statuses/home_timeline.json
     // count=25
     // since_id=1 (all tweets sorted by date)
-    public void getHomeTimeline(int page, long maxId, AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(long maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
-        params.put("count", 10);
+        params.put("count", 20);
         params.put("since_id", 1);
-        params.put("page", page);
         if (maxId != -1) {
             params.put("max_id", maxId);
         }
@@ -89,6 +88,26 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         getClient().post(apiUrl, params, handler);
     }
+
+    // POST favorites/create.json
+    // id=num
+    public void postFavorite(Long id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("favorites/create.json");
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        getClient().post(apiUrl, params, handler);
+    }
+
+
+    // POST favorites/create.json
+    // id=num
+    public void postUnFavorite(Long id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("favorites/destroy.json");
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        getClient().post(apiUrl, params, handler);
+    }
+
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");

@@ -51,15 +51,33 @@ public class Tweet {
         return entities;
     }
 
-    private String body;
-    private long uid;
-    private User user;
-    private String createdAt;
-    private int retweetCount;
-    private boolean retweeted;
-    private int favouritesCount;
-    private boolean favorited;
-    private ArrayList<Entity> entities;
+    public String body;
+    public long uid;
+    public User user;
+    public String createdAt;
+    public int retweetCount;
+
+    public void setRetweetCount(int retweetCount) {
+        TweetModel model = Tweet.getByUID(this.getUid());
+        this.retweetCount = retweetCount;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
+    }
+
+    public void setFavouritesCount(int favouritesCount) {
+        this.favouritesCount = favouritesCount;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+
+    public boolean retweeted;
+    public int favouritesCount;
+    public boolean favorited;
+    public ArrayList<Entity> entities;
 
     public Tweet() {}
 
@@ -87,7 +105,7 @@ public class Tweet {
             tweet.retweeted = jsonObject.getBoolean("retweeted");
             tweet.favouritesCount = jsonObject.getInt("favorite_count");
             tweet.favorited = jsonObject.getBoolean("favorited");
-            tweet.entities = Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media"));
+            tweet.entities = new ArrayList<Entity>();
 
             TweetModel tweetModel = Tweet.getByUID(tweet.getUid());
 

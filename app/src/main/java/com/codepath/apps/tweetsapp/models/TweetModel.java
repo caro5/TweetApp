@@ -24,19 +24,19 @@ public class TweetModel extends Model {
     @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     public UserModel user;
 
-    @Column(name = "retweet_count", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "retweet_count", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public int retweetCount;
 
-    @Column(name = "retweeted", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "retweeted", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public boolean retweeted;
 
-    @Column(name = "favourites_count", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "favourites_count", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public int favouritesCount;
 
-    @Column(name = "favorited", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "favorited", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public boolean favorited;
 
-    @Column(name = "entities", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "entities", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public ArrayList<Long> entityIds;
 
 
@@ -55,6 +55,27 @@ public class TweetModel extends Model {
         this.retweeted = retweeted;
         this.favouritesCount = favouritesCount;
         this.favorited = favorited;
+        this.entityIds = entityIds;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+
+    public void setFavouritesCount(int favouritesCount) {
+        this.favouritesCount = favouritesCount;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
+    }
+
+
+    public void setEntityIds(ArrayList<Long> entityIds) {
         this.entityIds = entityIds;
     }
 }

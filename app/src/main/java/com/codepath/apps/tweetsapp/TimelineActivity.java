@@ -1,7 +1,6 @@
 package com.codepath.apps.tweetsapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,12 +24,10 @@ import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.models.TweetModel;
 import com.codepath.apps.tweetsapp.models.UserModel;
 import com.codepath.apps.tweetsapp.utils.EndlessRecyclerViewScrollListener;
-import com.codepath.apps.tweetsapp.utils.ItemClickSupport;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,20 +67,16 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         layoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(layoutManager);
         client = TwitterApplication.getRestClient();
-
+        // if (isNetworkAvailable() || isOnline()) {
         if (!isNetworkAvailable() || !isOnline()) {
             Toast.makeText(this, "Unable to connect to the internet", Toast.LENGTH_LONG).show();
             List<TweetModel> queryResults = new Select().from(TweetModel.class)
                     .orderBy("created_at DESC").limit(40).execute();
             for (int i = 0; i < queryResults.size(); i++) {
-                TweetModel model = queryResults.get(i);
-//                List<Entity> entities = new Select().from(EntityModel.class)
-//                        .where("tweet_id = ?", model.remoteId)
-//                        .execute();
                 tweets.add(Tweet.fromModel(queryResults.get(i)));
             }
         } else {
-            populateTimeline(0, -1);
+           populateTimeline(-1);
         }
         setupListeners();
     }
@@ -92,7 +85,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeline(0, -1);
+                // populateTimeline(0, -1);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -127,28 +120,28 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 }
                 Tweet lastTweet = tweets.get(tweets.size() - 1);
                 long tweetId = lastTweet.getUid();
-                populateTimeline(page, tweetId);
+                // populateTimeline(page, tweetId);
             }
         });
 
-        ItemClickSupport.addTo(rvTweets).setOnItemClickListener(
-                new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Tweet tw = tweets.get(position);
-                        Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
-                        i.putExtra("tweet", Parcels.wrap(tw));
-                        startActivity(i);
-
-                    }
-                }
-        );
+//        ItemClickSupport.addTo(rvTweets).setOnItemClickListener(
+//                new ItemClickSupport.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                        Tweet tw = tweets.get(position);
+//                        Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
+//                        i.putExtra("tweet", Parcels.wrap(tw));
+//                        startActivity(i);
+//
+//                    }
+//                }
+//        );
     }
 
     // Send API request to get timeline json
     // fill listview by creating tweet objects
-    private void populateTimeline(int page, long maxId) {
-        client.getHomeTimeline(page, maxId, new JsonHttpResponseHandler() {
+    private void populateTimeline(long maxId) {
+        client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 tweets.addAll(0, Tweet.fromJSONArray(json));

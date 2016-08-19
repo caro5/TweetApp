@@ -1,32 +1,41 @@
 package com.codepath.apps.tweetsapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.tweetsapp.models.Tweet;
+import com.codepath.apps.tweetsapp.models.TweetModel;
 import com.codepath.apps.tweetsapp.utils.ParseRelativeDate;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import org.json.JSONObject;
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by cwong on 8/16/16.
  */
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
-    private List<Tweet> mTweets;
+    private ArrayList<Tweet> mTweets;
     private Context mContext;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.ivProfileImage)ImageView ivProfileImage;
         @BindView(R.id.tvBody) TextView tvBody;
         @BindView(R.id.tvUserName) TextView tvUserName;
         @BindView(R.id.tvScreenName) TextView tvScreenName;
@@ -39,10 +48,113 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Tweet tw = mTweets.get(getLayoutPosition());
+            Intent i = new Intent(view.getContext(), DetailActivity.class);
+            i.putExtra("tweet", Parcels.wrap(tw));
+            view.getContext().startActivity(i);
+        }
+
+        @OnClick(R.id.ivRetweets)
+        public void toggleRetweet(View view) {
+            final int position = getLayoutPosition();
+            final Tweet tweet = mTweets.get(position);
+            final ArrayList<Long> entityIds = new ArrayList<>();
+            for (int i = 0; i < tweet.getEntities().size(); i++) {
+                entityIds.add(tweet.getEntities().get(i).getId());
+            }
+            TwitterClient client = new TwitterClient(mContext);
+            if (tweet.isRetweeted()) {
+                // unretweet
+                client.postUnRetweet(tweet.getUid(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        TweetModel model = Tweet.getByUID(tweet.getUid());
+                        model.setRetweeted(false);
+                        model.setRetweetCount(model.retweetCount - 1);
+                        model.setEntityIds(entityIds);
+                        model.save();
+                        notifyItemChanged(position);
+                    }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, "Unable to unretweet ", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                client.postRetweet(tweet.getUid(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        TweetModel model = Tweet.getByUID(tweet.getUid());
+                        model.setRetweeted(true);
+                        model.setRetweetCount(model.retweetCount + 1);
+                        model.setEntityIds(entityIds);
+                        model.save();
+                        notifyItemChanged(position);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, "Unable to retweet ", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        }
+        @OnClick(R.id.ivFavorites)
+        public void toggleFavorites(View view) {
+            final int position = getLayoutPosition();
+            final Tweet tweet = mTweets.get(position);
+            final ArrayList<Long> entityIds = new ArrayList<>();
+            for (int i = 0; i < tweet.getEntities().size(); i++) {
+                entityIds.add(tweet.getEntities().get(i).getId());
+            }
+            TwitterClient client = new TwitterClient(mContext);
+            if (tweet.isFavorited()) {
+                // unfavorite
+                client.postUnFavorite(tweet.getUid(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        TweetModel model = Tweet.getByUID(tweet.getUid());
+                        model.setFavorited(false);
+                        model.setFavouritesCount(model.favouritesCount - 1);
+                        model.setEntityIds(entityIds);
+                        model.save();
+                        tweet.setFavorited(false);
+                        notifyItemChanged(position);
+                    }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, "Unable to unlike ", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                client.postFavorite(tweet.getUid(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        TweetModel model = Tweet.getByUID(tweet.getUid());
+                        model.setFavorited(true);
+                        model.setFavouritesCount(model.favouritesCount + 1);
+                        model.setEntityIds(entityIds);
+                        model.save();
+                        notifyItemChanged(position);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, "Unable to like ", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
         }
     }
 
-    public TweetsAdapter(Context context, List<Tweet> tweets) {
+    public TweetsAdapter(Context context, ArrayList<Tweet> tweets) {
         mTweets = tweets;
         mContext = context;
     }
@@ -62,7 +174,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(TweetsAdapter.ViewHolder viewHolder, int position) {
-        Tweet tweet = mTweets.get(position);
+        Tweet t = mTweets.get(position);
+        TweetModel m = Tweet.getByUID(t.getUid());
+        Tweet tweet = Tweet.fromModel(m);
+        mTweets.set(position, tweet);
 
         viewHolder.tvUserName.setText(tweet.getUser().getName());
         viewHolder.tvBody.setText(tweet.getBody());
@@ -73,9 +188,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         if (tweet.isRetweeted()) {
             viewHolder.ivRetweets.setImageResource(R.drawable.retweeted);
+        } else {
+            viewHolder.ivRetweets.setImageResource(R.drawable.retweet);
         }
         if (tweet.isFavorited()) {
             viewHolder.ivFavorites.setImageResource(R.drawable.liked);
+        } else {
+            viewHolder.ivFavorites.setImageResource(R.drawable.like);
         }
         viewHolder.tvFavoritesCount.setText(Integer.toString(tweet.getFavouritesCount()));
         viewHolder.tvRetweetCount.setText(Integer.toString(tweet.getRetweetCount()));
