@@ -202,8 +202,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             TweetModel m = Tweet.getByUID(tweet.getUid());
             tweet = Tweet.fromModel(m);
         } catch (Exception exception) {
-            Toast.makeText(mContext, "asdf", Toast.LENGTH_LONG).show();
         }
+
         mTweets.set(position, tweet);
 
         viewHolder.tvUserName.setText(tweet.getUser().getName());
