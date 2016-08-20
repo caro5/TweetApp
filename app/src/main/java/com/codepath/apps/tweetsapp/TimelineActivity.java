@@ -66,8 +66,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         layoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(layoutManager);
         client = TwitterApplication.getRestClient();
-        if (isNetworkAvailable() || isOnline()) {
-        // if (!isNetworkAvailable() || !isOnline()) {
+        if (!isNetworkAvailable() || !isOnline()) {
             Toast.makeText(this, "Unable to connect to the internet", Toast.LENGTH_LONG).show();
             List<TweetModel> queryResults = new Select().from(TweetModel.class)
                     .orderBy("created_at DESC").limit(40).execute();
