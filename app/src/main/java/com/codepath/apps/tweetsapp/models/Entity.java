@@ -4,8 +4,6 @@ package com.codepath.apps.tweetsapp.models;
  * Created by cwong on 8/17/16.
  */
 
-import com.activeandroid.query.Select;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,12 +47,6 @@ public class Entity {
             ent.id = jsonObject.getLong("id");
             ent.mediaUrl = jsonObject.getString("media_url");
             ent.type = jsonObject.getString("type");
-
-            EntityModel entityModel = Entity.getById(ent.getId());
-
-            if (entityModel == null) {
-                ent.saveEntity();
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -75,24 +67,5 @@ public class Entity {
             }
         }
         return entities;
-    }
-
-    public static EntityModel getById(long id) {
-        return new Select()
-                .from(EntityModel.class)
-                .where("remote_id = ?", id)
-                .executeSingle();
-    }
-
-    public void saveEntity() {
-        EntityModel model = new EntityModel(this.getId(), this.getMediaUrl(), this.getType());
-        model.save();
-    }
-    public static Entity fromModel(EntityModel model) {
-        Entity entity = new Entity();
-        entity.id = model.id;
-        entity.mediaUrl = model.mediaUrl;
-        entity.type = model.type;
-        return entity;
     }
 }

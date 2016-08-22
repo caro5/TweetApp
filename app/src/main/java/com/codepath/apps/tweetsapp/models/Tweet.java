@@ -151,13 +151,7 @@ public class Tweet {
     }
 
     public void saveTweet(UserModel user) {
-        ArrayList<Long> entityIds = new ArrayList<>();
-        if (this.getEntities().size() > 0) {
-            for (int i = 0; i < this.getEntities().size(); i++) {
-                entityIds.add(this.getEntities().get(i).getId());
-            }
-        }
-        TweetModel model = new TweetModel(this.getUid(), this.getBody(), this.getCreatedAt(), user, this.getRetweetCount(), this.isRetweeted(), this.getFavouritesCount(), this.isFavorited(), entityIds);
+        TweetModel model = new TweetModel(this.getUid(), this.getBody(), this.getCreatedAt(), user, this.getRetweetCount(), this.isRetweeted(), this.getFavouritesCount(), this.isFavorited());
         model.save();
     }
     public static Tweet fromModel(TweetModel model) {
@@ -170,13 +164,6 @@ public class Tweet {
         t.retweeted = model.retweeted;
         t.favouritesCount = model.favouritesCount;
         t.favorited = model.favorited;
-        t.entities = new ArrayList<Entity>();
-        if (model.entityIds != null) {
-            for (int i = 0; i < model.entityIds.size(); i++) {
-                Entity e = Entity.fromModel(Entity.getById(model.entityIds.get(i)));
-                t.entities.add(e);
-            }
-        }
         return t;
     }
 }

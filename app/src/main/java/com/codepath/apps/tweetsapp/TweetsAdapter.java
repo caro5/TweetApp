@@ -81,7 +81,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         TweetModel model = Tweet.getByUID(tweet.getUid());
                         model.setRetweeted(false);
                         model.setRetweetCount(model.retweetCount - 1);
-                        model.setEntityIds(entityIds);
                         model.save();
                         notifyItemChanged(position);
                     }
@@ -97,7 +96,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         TweetModel model = Tweet.getByUID(tweet.getUid());
                         model.setRetweeted(true);
                         model.setRetweetCount(model.retweetCount + 1);
-                        model.setEntityIds(entityIds);
                         model.save();
                         notifyItemChanged(position);
                     }
@@ -127,7 +125,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         TweetModel model = Tweet.getByUID(tweet.getUid());
                         model.setFavorited(false);
                         model.setFavouritesCount(model.favouritesCount - 1);
-                        model.setEntityIds(entityIds);
                         model.save();
                         tweet.setFavorited(false);
                         notifyItemChanged(position);
@@ -144,7 +141,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         TweetModel model = Tweet.getByUID(tweet.getUid());
                         model.setFavorited(true);
                         model.setFavouritesCount(model.favouritesCount + 1);
-                        model.setEntityIds(entityIds);
                         model.save();
                         notifyItemChanged(position);
                     }

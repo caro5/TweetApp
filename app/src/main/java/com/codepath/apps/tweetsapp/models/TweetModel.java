@@ -4,8 +4,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.util.ArrayList;
-
 /**
  * Created by cwong on 8/15/16.
  */
@@ -36,16 +34,12 @@ public class TweetModel extends Model {
     @Column(name = "favorited", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public boolean favorited;
 
-    @Column(name = "entities", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
-    public ArrayList<Long> entityIds;
-
-
     // need default constructor for every ActiveAndroid model
     public TweetModel() {
         super();
     }
 
-    public TweetModel(long remoteId, String body, String createdAt, UserModel user, int retweetCount, boolean retweeted, int favouritesCount, boolean favorited, ArrayList<Long> entityIds) {
+    public TweetModel(long remoteId, String body, String createdAt, UserModel user, int retweetCount, boolean retweeted, int favouritesCount, boolean favorited) {
         super();
         this.remoteId = remoteId;
         this.body = body;
@@ -55,7 +49,6 @@ public class TweetModel extends Model {
         this.retweeted = retweeted;
         this.favouritesCount = favouritesCount;
         this.favorited = favorited;
-        this.entityIds = entityIds;
     }
 
     public void setFavorited(boolean favorited) {
@@ -72,10 +65,5 @@ public class TweetModel extends Model {
 
     public void setRetweeted(boolean retweeted) {
         this.retweeted = retweeted;
-    }
-
-
-    public void setEntityIds(ArrayList<Long> entityIds) {
-        this.entityIds = entityIds;
     }
 }

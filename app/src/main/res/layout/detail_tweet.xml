@@ -71,6 +71,7 @@
         android:id="@+id/ivReply"
         android:layout_centerVertical="true"
         android:layout_alignRight="@+id/tvBody"
+        android:layout_below="@+id/ivEntity"
         android:layout_alignEnd="@+id/tvBody" />
 
         <ImageView
