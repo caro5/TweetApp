@@ -44,11 +44,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.tvUserName) TextView tvUserName;
         @BindView(R.id.tvScreenName) TextView tvScreenName;
         @BindView(R.id.tvDate) TextView tvDate;
+        @BindView(R.id.ivEntity) ImageView ivEntity;
         @BindView(R.id.ivRetweets) ImageView ivRetweets;
         @BindView(R.id.ivFavorites) ImageView ivFavorites;
         @BindView(R.id.ivReply) ImageView ivReply;
-        @BindView(R.id.tvFavoritesCount) TextView tvRetweetCount; // TODO: switch these values
-        @BindView(R.id.tvRetweetCount) TextView tvFavoritesCount; // TODO: switch these values
+        @BindView(R.id.tvFavoritesCount) TextView tvFavoritesCount;
+        @BindView(R.id.tvRetweetCount) TextView tvRetweetCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -209,6 +210,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         viewHolder.tvDate.setText(parseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(2, 2)).into(viewHolder.ivProfileImage);
+        viewHolder.ivEntity.setImageResource(android.R.color.transparent);
+        if (tweet.getEntities().size() > 0) {
+            Picasso.with(getContext()).load(tweet.getEntities().get(0).getMediaUrl()).into(viewHolder.ivEntity);
+        }
         if (tweet.isRetweeted()) {
             viewHolder.ivRetweets.setImageResource(R.drawable.retweeted);
         } else {
