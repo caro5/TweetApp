@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.codepath.apps.tweetsapp.models.TweetModel, com.codepath.apps.tweetsapp.models.UserModel, com.codepath.apps.tweetsapp.models.EntityModel" />
+            android:value="com.codepath.apps.tweetsapp.models.TweetModel, com.codepath.apps.tweetsapp.models.UserModel" />
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="1" />
