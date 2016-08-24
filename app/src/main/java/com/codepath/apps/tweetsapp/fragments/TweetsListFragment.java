@@ -62,7 +62,7 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
 //        ActiveAndroid.initialize(config.create());
 
 
-        // setupListeners();
+//          setupListeners();
     }
 //    public void setupListeners() {
 //        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
