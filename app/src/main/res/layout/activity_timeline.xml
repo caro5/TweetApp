@@ -26,7 +26,7 @@
         <fragment
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:name="com.codepath.apps.tweetsapp.fragments.TweetsListFragment"
+            android:name="com.codepath.apps.tweetsapp.fragments.HomeTimelineFragment"
             android:id="@+id/fragment_timeline"
             android:layout_below="@+id/toolbar"
             android:layout_alignParentLeft="true"
