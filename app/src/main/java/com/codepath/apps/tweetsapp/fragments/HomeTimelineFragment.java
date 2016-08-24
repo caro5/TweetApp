@@ -24,10 +24,23 @@ import cz.msebera.android.httpclient.Header;
  */
 public class HomeTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
+    public static final String ARG_PAGE = "ARG_PAGE";
+//
+//    private int mPage;
+//
+//    public static HomeTimelineFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        HomeTimelineFragment fragment = new HomeTimelineFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // mPage = getArguments().getInt(ARG_PAGE);
+
         client = TwitterApplication.getRestClient();
         if (!isNetworkAvailable() || !isOnline()) {
             Toast.makeText(getActivity(), "Unable to connect to the internet", Toast.LENGTH_LONG).show();
