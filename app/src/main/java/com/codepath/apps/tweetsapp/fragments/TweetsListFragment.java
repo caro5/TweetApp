@@ -38,7 +38,10 @@ public class TweetsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, parent, false);
-        ButterKnife.bind(v);
+        ButterKnife.bind(this, v);
+        layoutManager = new LinearLayoutManager(getActivity());
+        rvTweets.setLayoutManager(layoutManager);
+        rvTweets.setAdapter(adapter);
         return v;
     }
 
@@ -47,9 +50,7 @@ public class TweetsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(getActivity(), tweets);
-        rvTweets.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(getActivity());
-        rvTweets.setLayoutManager(layoutManager);
+
 //        Configuration.Builder config = new Configuration.Builder(getActivity());
 //        config.addModelClasses(TweetModel.class, UserModel.class);
 //        ActiveAndroid.initialize(config.create());

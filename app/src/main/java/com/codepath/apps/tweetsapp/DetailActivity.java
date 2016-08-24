@@ -54,7 +54,7 @@ public class DetailActivity extends AppCompatActivity implements ComposeFragment
             }
         });
         ivEntity.setImageResource(0);
-        if (tweet.getEntities().size() > 0) {
+        if (tweet.getEntities() != null && tweet.getEntities().size() > 0) {
             Picasso.with(this).load(tweet.getEntities().get(0).mediaUrl).into(ivEntity);
         }
 
