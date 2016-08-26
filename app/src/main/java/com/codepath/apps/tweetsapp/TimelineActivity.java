@@ -9,12 +9,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweetsapp.fragments.HomeTimelineFragment;
 import com.codepath.apps.tweetsapp.fragments.MentionsTimelineFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TimelineActivity extends AppCompatActivity {
     @BindView (R.id.toolbar) Toolbar toolbar;
@@ -23,8 +25,8 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_timeline);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new TweetsPagerAdapter(getSupportFragmentManager());
@@ -39,6 +41,13 @@ public class TimelineActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return super.onOptionsItemSelected(item);
+    }
+
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
         final int PAGE_COUNT = 2;
         private String tabTitles[] = new String[] { "Home", "Mentions"};
@@ -73,6 +82,8 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
-
+    public void onProfileView(MenuItem menuItem) {
+        // launch profile view
+    }
 
 }
