@@ -96,6 +96,7 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
         Bundle bundle = new Bundle();
         bundle.putBoolean("isReply", false);
         composeFragment.setArguments(bundle);
+        composeFragment.setTargetFragment(TweetsListFragment.this, 300);
         composeFragment.show(fm, "fragment_compose");
     }
 

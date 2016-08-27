@@ -168,6 +168,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             bundle.putParcelable("tweet", Parcels.wrap(tweet));
             bundle.putBoolean("isReply", true);
             composeFragment.setArguments(bundle);
+            composeFragment.setTargetFragment(fm.getFragments().get(0), 300);
             composeFragment.show(fm, "fragment_compose");
         }
 

@@ -58,7 +58,7 @@ public class ComposeFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        isReply = getArguments().getBoolean("isReply");
+         isReply = getArguments().getBoolean("isReply");
         if (isReply) {
             tweet = Parcels.unwrap(getArguments().getParcelable("tweet"));
             tweetId = tweet.getUid();
@@ -95,7 +95,6 @@ public class ComposeFragment extends DialogFragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
-
             }
         });
     }
@@ -122,11 +121,10 @@ public class ComposeFragment extends DialogFragment {
         });
     }
 
-    public boolean sendBackResult(Tweet tweet) {
-        ComposeFragmentListener listener = (ComposeFragmentListener) getActivity();
+    public void sendBackResult(Tweet tweet) {
+        ComposeFragmentListener listener = (ComposeFragmentListener) getTargetFragment();
         listener.onSuccessfulTweet(tweet);
         dismiss();
-        return true;
     }
 
     @Override
