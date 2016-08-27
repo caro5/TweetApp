@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.models.TweetModel;
 import com.codepath.apps.tweetsapp.utils.ParseRelativeDate;
+import com.codepath.apps.tweetsapp.utils.PatternEditableBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -202,7 +205,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(TweetsAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final TweetsAdapter.ViewHolder viewHolder, int position) {
         Tweet tweet = mTweets.get(position);
         try {
             TweetModel m = Tweet.getByUID(tweet.getUid());
@@ -235,8 +238,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         }
         viewHolder.tvFavoritesCount.setText(Integer.toString(tweet.getFavouritesCount()));
         viewHolder.tvRetweetCount.setText(Integer.toString(tweet.getRetweetCount()));
+
+        new PatternEditableBuilder().addPattern(Pattern.compile("\\@(\\w+)"), ContextCompat.getColor(getContext(), R.color.clickable_names),
+            new PatternEditableBuilder.SpannableClickedListener() {
+                @Override
+                public void onSpanClicked(String text) {
+                    clickedText(text);
+                    Toast.makeText(getContext(), "Clicked username: " + text,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).into(viewHolder.tvBody);
     }
 
+    public void clickedText(String screenname) {
+        String name = screenname.substring(1);
+        Intent i = new Intent(mContext, ProfileActivity.class);
+        i.putExtra("screenname", name);
+        mContext.startActivity(i);
+    }
     @Override
     public int getItemCount() {
         return mTweets.size();

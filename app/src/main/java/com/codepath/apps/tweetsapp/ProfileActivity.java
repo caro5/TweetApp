@@ -23,7 +23,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
-    TwitterClient client;
     User user;
 
     @BindView(R.id.tvName) TextView tvName;
@@ -38,13 +37,29 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        TwitterClient client = TwitterApplication.getRestClient();
 
-        if (getIntent().getParcelableExtra("user") != null) {
+
+        if (getIntent().getStringExtra("screenname") != null) {
+            client.getUserFromScreenName(getIntent().getStringExtra("screenname"), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    user = User.fromJSON(response);
+                    getSupportActionBar().setTitle("@" + user.getScreenName());
+                    populateProfileHeader(user);
+                    checkInstanceState(savedInstanceState);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                }
+            });
+        } else if (getIntent().getParcelableExtra("user") != null) {
             user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
             populateProfileHeader(user);
             checkInstanceState(savedInstanceState);
         } else {
-            client = TwitterApplication.getRestClient();
             client.getUserInfo(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
