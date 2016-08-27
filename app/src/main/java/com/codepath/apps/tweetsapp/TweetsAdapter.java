@@ -167,6 +167,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             composeFragment.setArguments(bundle);
             composeFragment.show(fm, "fragment_compose");
         }
+
+        @OnClick(R.id.ivProfileImage)
+        public void goToProfile(View v) {
+            final int position = getLayoutPosition();
+            final Tweet tweet = mTweets.get(position);
+            Intent i = new Intent(getContext(), ProfileActivity.class);
+            i.putExtra("user", Parcels.wrap(tweet.getUser()));
+            getContext().startActivity(i);
+        }
     }
 
     @Override

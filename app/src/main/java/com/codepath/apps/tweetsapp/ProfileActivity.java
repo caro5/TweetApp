@@ -15,6 +15,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,31 +33,40 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        client = TwitterApplication.getRestClient();
-        client.getUserInfo(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                user = User.fromJSON(response);
-                // get current user account info
-                getSupportActionBar().setTitle("@" + user.getScreenName());
-                populateProfileHeader(user);
-            }
-        });
-        String screenname = getIntent().getStringExtra("screenname");
+
+        if (getIntent().getParcelableExtra("user") != null) {
+            user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+            populateProfileHeader(user);
+            checkInstanceState(savedInstanceState);
+        } else {
+            client = TwitterApplication.getRestClient();
+            client.getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    user = User.fromJSON(response);
+                    // get current user account info
+                    getSupportActionBar().setTitle("@" + user.getScreenName());
+                    populateProfileHeader(user);
+                    checkInstanceState(savedInstanceState);
+                }
+            });
+        }
+    }
+
+    private void checkInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             // only run if haven't run before
-            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenname);
+            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(user.getScreenName());
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContainer, userTimelineFragment);
             ft.commit(); //changes fragment
         }
     }
-
     private void populateProfileHeader(User user) {
         tvName.setText(user.getName());
         tvTagline.setText(user.getTagline());
