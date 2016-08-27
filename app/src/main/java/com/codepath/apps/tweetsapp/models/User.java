@@ -27,18 +27,37 @@ public class User {
         return profileImageUrl;
     }
 
+    public String getTagline() {
+        return tagline;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFollowingsCount() {
+        return followingsCount;
+    }
+
     public String name;
     public long uid;
     public String screenName;
     public String profileImageUrl;
+    private String tagline;
+    private int followersCount;
+    private int followingsCount;
+
 
     public User() {}
 
-    public User(String name, long uid, String screenName, String profileImageUrl) {
+    public User(String name, long uid, String screenName, String profileImageUrl, String tagline, int followersCount, int followingsCount) {
         this.name = name;
         this.uid = uid;
         this.screenName = screenName;
         this.profileImageUrl = profileImageUrl;
+        this.tagline = tagline;
+        this.followersCount = followersCount;
+        this.followingsCount = followingsCount;
     }
 
     public static User fromJSON(JSONObject jsonObject) {
@@ -49,6 +68,9 @@ public class User {
             u.uid = jsonObject.getLong("id");
             u.screenName = jsonObject.getString("screen_name");
             u.profileImageUrl = jsonObject.getString("profile_image_url");
+            u.tagline = jsonObject.getString("description");
+            u.followersCount = jsonObject.getInt("followers_count");
+            u.followingsCount = jsonObject.getInt("friends_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -63,7 +85,7 @@ public class User {
     }
 
     public UserModel saveUser() {
-        UserModel model = new UserModel(this.getUid(), this.getName(), this.getScreenName(), this.getProfileImageUrl());
+        UserModel model = new UserModel(this.getUid(), this.getName(), this.getScreenName(), this.getProfileImageUrl(), this.getTagline(), this.getFollowersCount(), this.getFollowingsCount());
         model.save();
         return model;
     }
@@ -74,6 +96,9 @@ public class User {
         u.uid = model.remoteId;
         u.screenName = model.screenName;
         u.profileImageUrl = model.profileImageUrl;
+        u.tagline = model.tagline;
+        u.followersCount = model.followersCount;
+        u.followingsCount = model.followingsCount;
         return u;
     }
 }

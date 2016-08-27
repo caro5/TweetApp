@@ -22,16 +22,27 @@ public class UserModel extends Model {
     @Column(name = "profile_image_url", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String profileImageUrl;
 
+    @Column(name = "tagline", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public String tagline;
+
+    @Column(name = "followers_count", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public int followersCount;
+
+    @Column(name = "following_count", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public int followingsCount;
+
     // need default constructor for every ActiveAndroid model
     public UserModel() {
         super();
     }
 
-    public UserModel(long remoteId, String name, String screenName, String profileImageUrl) {
+    public UserModel(long remoteId, String name, String screenName, String profileImageUrl, String tagline, int followersCount, int followingsCount) {
         super();
         this.remoteId = remoteId;
         this.name = name;
         this.screenName = screenName;
         this.profileImageUrl = profileImageUrl;
+        this.followersCount = followersCount;
+        this.followingsCount = followingsCount;
     }
 }

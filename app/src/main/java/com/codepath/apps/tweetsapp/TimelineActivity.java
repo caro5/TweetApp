@@ -1,6 +1,7 @@
 package com.codepath.apps.tweetsapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -83,7 +84,8 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void onProfileView(MenuItem menuItem) {
-        // launch profile view
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 
 }

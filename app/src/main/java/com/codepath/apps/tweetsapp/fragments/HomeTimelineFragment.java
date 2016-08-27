@@ -42,6 +42,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
        // mPage = getArguments().getInt(ARG_PAGE);
 
         client = TwitterApplication.getRestClient();
+        //if (isNetworkAvailable() || isOnline()) {
         if (!isNetworkAvailable() || !isOnline()) {
             Toast.makeText(getActivity(), "Unable to connect to the internet", Toast.LENGTH_LONG).show();
             List<TweetModel> queryResults = new Select().from(TweetModel.class)
