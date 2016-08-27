@@ -2,7 +2,9 @@ package com.codepath.apps.tweetsapp.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
@@ -10,6 +12,7 @@ import com.codepath.apps.tweetsapp.TwitterApplication;
 import com.codepath.apps.tweetsapp.TwitterClient;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.models.TweetModel;
+import com.codepath.apps.tweetsapp.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -24,25 +27,11 @@ import cz.msebera.android.httpclient.Header;
  */
 public class HomeTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
-    public static final String ARG_PAGE = "ARG_PAGE";
-//
-//    private int mPage;
-//
-//    public static HomeTimelineFragment newInstance(int page) {
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PAGE, page);
-//        HomeTimelineFragment fragment = new HomeTimelineFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // mPage = getArguments().getInt(ARG_PAGE);
-
         client = TwitterApplication.getRestClient();
-        //if (isNetworkAvailable() || isOnline()) {
         if (!isNetworkAvailable() || !isOnline()) {
             Toast.makeText(getActivity(), "Unable to connect to the internet", Toast.LENGTH_LONG).show();
             List<TweetModel> queryResults = new Select().from(TweetModel.class)
@@ -55,6 +44,32 @@ public class HomeTimelineFragment extends TweetsListFragment {
         }
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        setupTimelineFragmentListeners();
+    }
+
+    private void setupTimelineFragmentListeners() {
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline(-1);
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (!isOnline() || !isNetworkAvailable()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Unable to connect to the internet", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Tweet lastTweet = getTweet(getTweetArraySize() - 1);
+                long tweetId = lastTweet.getUid();
+                populateTimeline(tweetId);
+            }
+        });
+    }
     // Send API request to get timeline json
     // fill listview by creating tweet objects
     private void populateTimeline(long maxId) {
@@ -67,7 +82,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
-
             }
         });
     }

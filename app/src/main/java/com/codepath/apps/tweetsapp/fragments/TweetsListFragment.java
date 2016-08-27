@@ -12,8 +12,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.tweetsapp.ComposeFragment;
 import com.codepath.apps.tweetsapp.R;
@@ -48,6 +50,7 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
         layoutManager = new LinearLayoutManager(getActivity());
         rvTweets.setLayoutManager(layoutManager);
         rvTweets.setAdapter(adapter);
+        setupListeners();
         return v;
     }
 
@@ -61,53 +64,31 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
 //        config.addModelClasses(TweetModel.class, UserModel.class);
 //        ActiveAndroid.initialize(config.create());
 
-
-//          setupListeners();
     }
-//    public void setupListeners() {
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                populateTimeline(-1);
-//                swipeContainer.setRefreshing(false);
-//            }
-//        });
-//        // Configure the refreshing colors
-//        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
-//
-//        fabCreate.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                if (!isOnline() || !isNetworkAvailable()) {
-//                    Toast.makeText(getActivity().getApplicationContext(), "Connect to the internet before tweeting", Toast.LENGTH_LONG).show();
-//                    return false;
-//                }
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//                    composeMessage();
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            }
-//        });
-//
-//        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                if (!isOnline() || !isNetworkAvailable()) {
-//                    Toast.makeText(getActivity().getApplicationContext(), "Unable to connect to the internet", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//                Tweet lastTweet = tweets.get(tweets.size() - 1);
-//                long tweetId = lastTweet.getUid();
-//                populateTimeline(tweetId);
-//            }
-//        });
-//    }
+    public void setupListeners() {
 
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        fabCreate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!isOnline() || !isNetworkAvailable()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connect to the internet before tweeting", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    composeMessage();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
 
     public void composeMessage() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -133,6 +114,15 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
         adapter.notifyItemInserted(0);
         rvTweets.scrollToPosition(0);
     }
+
+    public Tweet getTweet(int position){
+        return tweets.get(position);
+    }
+
+    public int getTweetArraySize() {
+        return tweets.size();
+    }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
