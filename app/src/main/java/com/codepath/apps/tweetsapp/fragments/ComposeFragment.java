@@ -1,4 +1,4 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +12,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.codepath.apps.tweetsapp.R;
+import com.codepath.apps.tweetsapp.TwitterApplication;
+import com.codepath.apps.tweetsapp.TwitterClient;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 

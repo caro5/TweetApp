@@ -1,4 +1,4 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.apps.tweetsapp.fragments.ComposeFragment;
+import com.codepath.apps.tweetsapp.R;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;

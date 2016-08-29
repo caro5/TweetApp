@@ -1,4 +1,4 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +7,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.tweetsapp.R;
+import com.codepath.apps.tweetsapp.TwitterApplication;
+import com.codepath.apps.tweetsapp.TwitterClient;
 import com.codepath.apps.tweetsapp.fragments.TweetsListFragment;
 import com.codepath.apps.tweetsapp.fragments.UserTimelineFragment;
 import com.codepath.apps.tweetsapp.models.User;

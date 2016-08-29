@@ -1,4 +1,4 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.tweetsapp.R;
 import com.codepath.apps.tweetsapp.fragments.HomeTimelineFragment;
 import com.codepath.apps.tweetsapp.fragments.MentionsTimelineFragment;
 import com.codepath.apps.tweetsapp.fragments.TweetsListFragment;

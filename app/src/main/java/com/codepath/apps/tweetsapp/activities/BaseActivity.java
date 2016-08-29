@@ -1,4 +1,4 @@
-package com.codepath.apps.tweetsapp;
+package com.codepath.apps.tweetsapp.activities;
 
 import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+
+import com.codepath.apps.tweetsapp.R;
+import com.codepath.apps.tweetsapp.activities.ProfileActivity;
 
 /**
  * Created by carolinewong on 8/28/16.

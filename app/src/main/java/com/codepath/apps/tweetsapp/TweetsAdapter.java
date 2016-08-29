@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.apps.tweetsapp.activities.DetailActivity;
+import com.codepath.apps.tweetsapp.activities.ProfileActivity;
+import com.codepath.apps.tweetsapp.fragments.ComposeFragment;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.models.TweetModel;
 import com.codepath.apps.tweetsapp.utils.ParseRelativeDate;

@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.codepath.apps.tweetsapp.ComposeFragment;
 import com.codepath.apps.tweetsapp.R;
 import com.codepath.apps.tweetsapp.TweetsAdapter;
 import com.codepath.apps.tweetsapp.models.Tweet;
