@@ -17,9 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
 import com.codepath.apps.tweetsapp.R;
 import com.codepath.apps.tweetsapp.TweetsAdapter;
 import com.codepath.apps.tweetsapp.models.Tweet;
+import com.codepath.apps.tweetsapp.models.TweetModel;
+import com.codepath.apps.tweetsapp.models.UserModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,9 +63,9 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(getActivity(), tweets);
 
-//        Configuration.Builder config = new Configuration.Builder(getActivity());
-//        config.addModelClasses(TweetModel.class, UserModel.class);
-//        ActiveAndroid.initialize(config.create());
+        Configuration.Builder config = new Configuration.Builder(getActivity());
+        config.addModelClasses(TweetModel.class, UserModel.class);
+        ActiveAndroid.initialize(config.create());
 
     }
     public void setupListeners() {

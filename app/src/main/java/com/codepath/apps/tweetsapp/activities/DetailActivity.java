@@ -56,7 +56,7 @@ public class DetailActivity extends BaseActivity implements ComposeFragment.Comp
         });
         ivEntity.setImageResource(0);
         if (tweet.getEntities() != null && tweet.getEntities().size() > 0) {
-            Picasso.with(this).load(tweet.getEntities().get(0).mediaUrl).into(ivEntity);
+            Picasso.with(this).load(tweet.getEntities().get(0).mediaUrl).transform(new RoundedCornersTransformation(2, 2)).into(ivEntity);
         }
 
         ivReply.setOnClickListener(new View.OnClickListener() {

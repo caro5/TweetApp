@@ -228,7 +228,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(2, 2)).into(viewHolder.ivProfileImage);
         viewHolder.ivEntity.setImageResource(android.R.color.transparent);
         if (tweet.getEntities() != null && tweet.getEntities().size() > 0) {
-            Picasso.with(getContext()).load(tweet.getEntities().get(0).getMediaUrl()).into(viewHolder.ivEntity);
+            Picasso.with(getContext()).load(tweet.getEntities().get(0).getMediaUrl()).transform(new RoundedCornersTransformation(2, 2)).into(viewHolder.ivEntity);
         }
         if (tweet.isRetweeted()) {
             viewHolder.ivRetweets.setImageResource(R.drawable.retweeted);
