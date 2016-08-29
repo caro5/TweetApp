@@ -2,13 +2,12 @@ package com.codepath.apps.tweetsapp;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.tweetsapp.fragments.TweetsListFragment;
 import com.codepath.apps.tweetsapp.fragments.UserTimelineFragment;
 import com.codepath.apps.tweetsapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -21,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity implements TweetsListFragment.TweetsListFragmentListener {
     @BindView(R.id.toolbar) Toolbar toolbar;
     User user;
 
@@ -39,8 +38,8 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         TwitterClient client = TwitterApplication.getRestClient();
 
-
         if (getIntent().getStringExtra("screenname") != null) {
+            showProgressBar();
             client.getUserFromScreenName(getIntent().getStringExtra("screenname"), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -48,10 +47,12 @@ public class ProfileActivity extends AppCompatActivity {
                     getSupportActionBar().setTitle("@" + user.getScreenName());
                     populateProfileHeader(user);
                     checkInstanceState(savedInstanceState);
+                    hideProgressBar();
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    hideProgressBar();
                     super.onFailure(statusCode, headers, responseString, throwable);
                 }
             });
@@ -60,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
             populateProfileHeader(user);
             checkInstanceState(savedInstanceState);
         } else {
+            showProgressBar();
             client.getUserInfo(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -68,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
                     getSupportActionBar().setTitle("@" + user.getScreenName());
                     populateProfileHeader(user);
                     checkInstanceState(savedInstanceState);
+                    hideProgressBar();
                 }
             });
         }
@@ -92,12 +95,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.menu_profile, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 //
@@ -105,5 +102,15 @@ public class ProfileActivity extends AppCompatActivity {
 //            return true;
 //        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAsyncCallStart() {
+        showProgressBar();
+    }
+
+    @Override
+    public void onAsyncCallEnd() {
+        hideProgressBar();
     }
 }

@@ -1,25 +1,23 @@
 package com.codepath.apps.tweetsapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweetsapp.fragments.HomeTimelineFragment;
 import com.codepath.apps.tweetsapp.fragments.MentionsTimelineFragment;
+import com.codepath.apps.tweetsapp.fragments.TweetsListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends BaseActivity implements TweetsListFragment.TweetsListFragmentListener {
     @BindView (R.id.toolbar) Toolbar toolbar;
     FragmentPagerAdapter adapterViewPager;
 
@@ -37,10 +35,13 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
+    public void onAsyncCallStart() {
+        showProgressBar();
+    }
+
+    @Override
+    public void onAsyncCallEnd() {
+        hideProgressBar();
     }
 
     @Override
@@ -81,11 +82,6 @@ public class TimelineActivity extends AppCompatActivity {
             // Generate title based on item position
             return tabTitles[position];
         }
-    }
-
-    public void onProfileView(MenuItem menuItem) {
-        Intent i = new Intent(this, ProfileActivity.class);
-        startActivity(i);
     }
 
 }

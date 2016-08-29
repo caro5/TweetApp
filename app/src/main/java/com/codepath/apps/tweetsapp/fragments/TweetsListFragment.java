@@ -90,6 +90,11 @@ public class TweetsListFragment extends Fragment implements ComposeFragment.Comp
         });
     }
 
+    public interface TweetsListFragmentListener {
+        public void onAsyncCallStart();
+        public void onAsyncCallEnd();
+    }
+
     public void composeMessage() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         ComposeFragment composeFragment = ComposeFragment.newInstance();

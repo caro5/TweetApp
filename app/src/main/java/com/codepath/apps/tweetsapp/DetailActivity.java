@@ -2,7 +2,6 @@ package com.codepath.apps.tweetsapp;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +21,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 /**
  * Created by cwong on 8/17/16.
  */
-public class DetailActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
+public class DetailActivity extends BaseActivity implements ComposeFragment.ComposeFragmentListener {
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
     @BindView(R.id.tvBody) TextView tvBody;
     @BindView(R.id.tvUserName) TextView tvUserName;

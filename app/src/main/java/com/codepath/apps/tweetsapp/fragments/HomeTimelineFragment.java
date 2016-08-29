@@ -73,15 +73,21 @@ public class HomeTimelineFragment extends TweetsListFragment {
     // Send API request to get timeline json
     // fill listview by creating tweet objects
     private void populateTimeline(long maxId) {
+        TweetsListFragmentListener listener = (TweetsListFragmentListener) getActivity();
+        listener.onAsyncCallStart();
         client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 addAll(0, Tweet.fromJSONArray(json));
+                TweetsListFragmentListener listener = (TweetsListFragmentListener) getActivity();
+                listener.onAsyncCallEnd();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
+                TweetsListFragmentListener listener = (TweetsListFragmentListener) getActivity();
+                listener.onAsyncCallEnd();
             }
         });
     }
