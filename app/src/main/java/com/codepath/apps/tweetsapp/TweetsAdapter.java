@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.tweetsapp.activities.DetailActivity;
 import com.codepath.apps.tweetsapp.activities.ProfileActivity;
+import com.codepath.apps.tweetsapp.activities.SearchActivity;
 import com.codepath.apps.tweetsapp.fragments.ComposeFragment;
 import com.codepath.apps.tweetsapp.models.Tweet;
 import com.codepath.apps.tweetsapp.models.TweetModel;
@@ -248,16 +249,26 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 @Override
                 public void onSpanClicked(String text) {
                     clickedText(text);
-                    Toast.makeText(getContext(), "Clicked username: " + text,
-                            Toast.LENGTH_SHORT).show();
                 }
-            }).into(viewHolder.tvBody);
+            }).addPattern(Pattern.compile("\\#(\\w+)"), ContextCompat.getColor(getContext(), R.color.clickable_tags),
+                new PatternEditableBuilder.SpannableClickedListener() {
+                    @Override
+                    public void onSpanClicked(String text) {
+                        clickedHashtag(text);
+                    }
+                }).into(viewHolder.tvBody);
     }
 
     public void clickedText(String screenname) {
         String name = screenname.substring(1);
         Intent i = new Intent(mContext, ProfileActivity.class);
         i.putExtra("screenname", name);
+        mContext.startActivity(i);
+    }
+    public void clickedHashtag(String tag) {
+        String tagString = tag.substring(1);
+        Intent i = new Intent(mContext, SearchActivity.class);
+        i.putExtra("search", tagString);
         mContext.startActivity(i);
     }
     @Override

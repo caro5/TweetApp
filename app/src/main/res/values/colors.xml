@@ -2,4 +2,6 @@
 <resources>
     <color name="twitter_main_color">#55acee</color>
     <color name="clickable_names">#84c3f2</color>
+    <color name="clickable_tags">#84e2f2</color>
+
 </resources>

@@ -50,7 +50,7 @@ public class SearchActivity extends BaseActivity implements ComposeFragment.Comp
 
         Intent intent = getIntent();
         query = intent.getStringExtra("search");
-
+        getSupportActionBar().setTitle(query);
         retrieveTweets();
     }
 
